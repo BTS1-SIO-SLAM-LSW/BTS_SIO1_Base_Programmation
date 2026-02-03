@@ -1,0 +1,112 @@
+@startuml gestion_scolaire
+left to right direction
+skinParam arrow.color #red
+skinParam arrow.thickness 2
+
+
+package "Elèves" {
+
+    actor "Elève" as eleve
+    actor "Elève BTS SIO SLAM" as eleve_bts_sio_slam
+    actor "Elève BTS SIO SISR" as eleve_bts_sio_sisr
+    actor "Elève BTS Assurance" as eleve_bts_assurance
+    actor "Elève de STMG" as eleve_stmg
+
+}
+
+
+package "Professeurs" {
+
+    actor "Professeur" as professeur
+    actor "Professeur BTS SIO SLAM" as professeur_bts_sio_slam
+    actor "Professeur BTS SIO SISR" as professeur_bts_sio_sisr
+    actor "Professeur de Français" as professeur_francais
+    actor "Professeur de Maths" as professeur_maths
+}
+
+
+package "Administrateurs" {
+
+    actor "Administrateur" as admin
+    actor "Proviseur-adjoint" as proviseur_adjoint
+    actor "Proviseur" as proviseur
+    actor "Assistante de Direction" as assistante_direction
+    actor "Secrétaire général" as secretaire_general
+    
+}
+
+
+rectangle "Système de Gestion Scolaire" {
+
+    usecase "Consulter les notes" as UC_consulter_notes
+    usecase "Déposer un devoir" as UC_deposer_devoir
+    usecase "Saisir les notes" as UC_saisir_notes
+    usecase "Gérer les utilisateurs" as UC_gerer_utilisateurs
+    usecase "Paramétrage des compétences du référentiel BTS SIO SISR" as UC_parametrage_referentiel_sisr
+    usecase "Paramétrage des compétences du référentiel BTS SIO SLAM" as UC_parametrage_referentiel_slam
+
+    usecase "S'authentifier" as UC_authentifier
+    usecase "Imprimer notes" as UC_imprimer_notes
+
+}
+
+eleve --> UC_consulter_notes
+eleve --> UC_deposer_devoir
+
+eleve <|-- eleve_bts_sio_slam
+eleve <|-- eleve_bts_sio_sisr
+eleve <|-- eleve_bts_assurance
+eleve <|-- eleve_stmg
+
+professeur --> UC_consulter_notes
+professeur --> UC_saisir_notes
+professeur_bts_sio_sisr --> UC_parametrage_referentiel_sisr
+professeur_bts_sio_slam --> UC_parametrage_referentiel_slam
+
+professeur <|-- professeur_bts_sio_slam
+professeur <|-- professeur_bts_sio_sisr
+professeur <|-- professeur_francais
+professeur <|-- professeur_maths
+
+
+admin --> UC_gerer_utilisateurs
+
+admin <|-- proviseur
+admin <|-- proviseur_adjoint
+admin <|-- assistante_direction
+admin <|-- secretaire_general
+
+UC_consulter_notes .left.> UC_authentifier : <<include>>
+UC_saisir_notes .left.> UC_authentifier : <<include>>
+UC_deposer_devoir .left.> UC_authentifier : <<include>>
+UC_gerer_utilisateurs .left.> UC_authentifier : <<include>>
+UC_parametrage_referentiel_sisr .left.> UC_authentifier : <<include>>
+UC_parametrage_referentiel_slam .left.> UC_authentifier : <<include>>
+UC_consulter_notes .right.> UC_imprimer_notes : <<extend>>
+
+note right of UC_consulter_notes
+    Ceci est est une note
+    rattachée à la droite d'un cas d'utilisation
+end note
+
+note left of UC_consulter_notes
+    Ceci est est une note
+    rattachée à la gauche d'un cas d'utilisation
+end note
+
+
+note "Ceci est un commentaire \nentre un acteur et un cas d'utilisation" as N1
+(eleve) .. N1
+N1 .. (UC_consulter_notes)
+
+note "Ceci est un commentaire \nentre un acteur et un acteur" as Mon_commentaire1
+(eleve) .. Mon_commentaire1
+Mon_commentaire1 .. (admin)
+
+legend left
+ = Légende du Diagramrastructure, Systèmes et Réseaux
+ * SLAM : Solutions Logicielles et Applications Métiers.
+
+end legend
+
+@enduml
